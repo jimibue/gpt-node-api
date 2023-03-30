@@ -6,37 +6,50 @@ router.get("/", (req, res) => {
 });
 
 router.get("/test", async (req, res) => {
-    const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: 'why is the sky blue' }],
-    });
-  
-    res.json({ completion: completion.data.choices[0].message });
-  });
-
-router.post("/", async (req, res) => {
-  const { message } = req.body;
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: message }],
+    messages: [{ role: "user", content: "why is the sky blue" }],
   });
 
   res.json({ completion: completion.data.choices[0].message });
 });
 
+router.post("/", async (req, res) => {
+  try {
+    const { message } = req.body;
+    console.log("message", message);
+    const completion = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: message }],
+    });
+
+    res.json({ completion: completion.data.choices[0].message });
+  } catch (err) {
+    res.status(500).json({ err: err });
+  }
+});
+
 router.post("/multiple", async (req, res) => {
+  try {
     const { messages } = req.body;
     // https://platform.openai.com/docs/guides/chat/introduction
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
-      
+
       messages: [
-        {"role": "system", "content": "You are giving people life advice through the lens of christianity. You are a christian. You are Jesus. "},
-        ...messages
+        {
+          role: "system",
+          content:
+            "You are giving people life advice through the lens of christianity. You are a christian. You are Jesus. ",
+        },
+        ...messages,
       ],
     });
-  
+
     res.json({ completion: completion.data.choices[0].message });
-  });
+  } catch (err) {
+    res.status(500).json({ err: err });
+  }
+});
 
 module.exports = router;
