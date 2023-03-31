@@ -1,8 +1,21 @@
 const openai = require("../config/openai.config");
 const router = require("express").Router();
+const { createChatCompletion } = require("../helpers/openaiHelper");
+const { JESUS } = require("./roles");
 
 router.get("/", (req, res) => {
   res.send("Hello World!");
+});
+
+
+router.post("/jesus", async (req, res) => {
+    try {
+      const { messages } = req.body;
+      const result = await createChatCompletion(messages, JESUS);
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ err: err });
+    }
 });
 
 router.get("/test", async (req, res) => {
@@ -29,27 +42,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/multiple", async (req, res) => {
-  try {
-    const { messages } = req.body;
-    // https://platform.openai.com/docs/guides/chat/introduction
-    const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
 
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are giving people life advice through the lens of christianity. You are a christian. You are Jesus. ",
-        },
-        ...messages,
-      ],
-    });
 
-    res.json({ completion: completion.data.choices[0].message });
-  } catch (err) {
-    res.status(500).json({ err: err });
-  }
-});
+
+
 
 module.exports = router;

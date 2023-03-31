@@ -9,10 +9,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 const app = express();
 
-var corsOptions = {
-  origin: "http://localhost:8081"
-};
-
 app.use(cors());
 
 // parse requests of content-type - application/json
@@ -22,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/chat", require("./src/routes/chat.routes.js"));
+app.use("/chat", require("./src/routes/socialize.routes.js"));
 
 // simple route
 app.get("/", (req, res) => {
