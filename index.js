@@ -19,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/chat", require("./src/routes/chat.routes.js"));
 app.use("/chat", require("./src/routes/socialize.routes.js"));
+app.use("/chat", require("./src/routes/query.routes.js"));
 
 // simple route
 app.get("/", (req, res) => {

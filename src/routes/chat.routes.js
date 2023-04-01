@@ -11,6 +11,8 @@ router.get("/", (req, res) => {
 router.post("/jesus", async (req, res) => {
     try {
       const { messages } = req.body;
+      console.log({messages})
+      console.log({JESUS})
       const result = await createChatCompletion(messages, JESUS);
       res.json(result);
     } catch (err) {
